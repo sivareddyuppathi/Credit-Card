@@ -1,0 +1,67 @@
+<div class="example-card card-margin" fxLayoutAlign="center">
+  <div *ngIf="allFieldsValid"></div>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>My Card</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="cardForm" (ngSubmit)="createCard()">
+        <div>
+          <mat-form-field class="full-width">
+            <!-- Card Number -->
+            <mat-label>Card Number</mat-label>
+            <input (keypress)="formatCardNumber($event)" matInput formControlName="number" card-number>
+            <mat-error *ngIf="creditCardNumber.errors?.required || creditCardNumber.errors?.minlength">
+              Card number must be 16 digits</mat-error>
+          </mat-form-field>
+          <!-- Card Holder Name -->
+          <mat-form-field class="full-width">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" card-name>
+            <mat-error *ngIf="cardHolderName.errors?.required">
+              Card Holder Name required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <!-- Expiry Date -->
+          <mat-form-field class="example-full-width" style="margin-right: 16px;">
+            <mat-label>Exp Date(MM/YYYY)</mat-label>
+            <input matInput (keypress)="appendForwardSlashToExpDate($event)" formControlName="expiry" card-expiry>
+            <mat-error *ngIf="cardExpiration.errors?.required">Expiry date required</mat-error>
+            <mat-error *ngIf="(cardExpiration.value.length === 2) && cardExpiration.errors?.forbidenMonthYear">Enter
+              Valid Month</mat-error>
+            <mat-error *ngIf="(cardExpiration.value.length > 5) && cardExpiration.errors?.forbidenMonthYear">Enter Valid
+              Year
+            </mat-error>
+            <mat-error *ngIf="cardExpiration.errors?.minLength">must enter month and
+              year
+            </mat-error>
+
+
+          </mat-form-field>
+          <!-- CVV -->
+          <mat-form-field class="example-full-width space-btwn-two-inputs">
+            <mat-label>CVV</mat-label>
+            <input matInput formControlName="ccv" card-cvc>
+            <mat-error *ngIf="creditCardCVV.errors?.maxlength">
+              Cvv max 3 digts</mat-error>
+          </mat-form-field>
+        </div>
+        <div>
+          <!-- Amount -->
+          <mat-form-field class="full-width">
+            <mat-label>Amount</mat-label>
+            <input matInput formControlName="amount" amount>
+            <mat-error *ngIf="cardAmount.errors?.required">
+              Amount rquired</mat-error>
+            <mat-error *ngIf="cardAmount.errors?.pattern">amount must be grater than zero</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="mat-button-right" fxLayoutAlign="end">
+          <button mat-raised-button color="primary">Submit</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
